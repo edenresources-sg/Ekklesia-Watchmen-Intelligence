@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新加坡守望情報室 · Ekklesia</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@300;400;500;700&family=IM+Fell+English:ital@0;1&family=Noto+Sans+TC:wght@400;500&family=Oswald:wght@400;500;600&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-dim: #7A5E1A;
+  --gold-pale: #F5E9CC;
+  --deep: #090912;
+  --navy: #0D1020;
+  --ink: #161628;
+  --card: #111120;
+  --border: rgba(201,168,76,.15);
+  --text: #E8E4D8;
+  --muted: #8A8070;
+  --soft: #F0EBE0;
+  --green: #3A7A3A;
+  --green-bg: #0E1A0E;
+  --green-border: rgba(80,160,80,.25);
+  --blue: #2A5A9F;
+  --blue-bg: #0A0F1E;
+  --blue-border: rgba(60,120,200,.25);
+  --red-bg: #1A080A;
+  --red-border: rgba(160,50,60,.25);
+  --red: #C04050;
+  --orange: #C07030;
+  --orange-bg: #1A0E08;
+  --orange-border: rgba(180,110,50,.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { background:var(--deep); color:var(--text); font-family:'Noto Sans TC',sans-serif; font-size:14px; line-height:1.7; overflow-x:hidden; }
+
+/* ── TOP BAR ── */
+.topbar {
+  background:var(--navy);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:200;
+}
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-logo { font-family:'Cinzel',serif; font-size:.9rem; color:var(--gold); letter-spacing:2px; }
+.topbar-sub { font-size:.7rem; color:var(--muted); }
+.topbar-date { font-size:.72rem; color:var(--muted); text-align:right; }
+.live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#4CAF50; margin-right:5px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ── HERO ── */
+.hero {
+  background:linear-gradient(160deg,#0D1438 0%,#170D30 60%,#090912 100%);
+  padding:32px 16px 24px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.12),transparent 65%); pointer-events:none; }
+.hero h1 { font-family:'Cinzel',serif; font-size:clamp(1.2rem,4vw,1.8rem); color:var(--gold); margin-bottom:4px; position:relative; }
+.hero-sub { font-family:'IM Fell English',serif; font-style:italic; color:var(--muted); font-size:.85rem; position:relative; }
+.hero-verse { margin:14px auto 0; max-width:480px; font-family:'IM Fell English',serif; font-style:italic; font-size:.82rem; color:var(--gold-pale); border-left:2px solid rgba(201,168,76,.4); padding-left:12px; text-align:left; position:relative; }
+
+/* ── SOURCE TABS ── */
+.source-tabs { display:flex; background:var(--ink); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+.source-tabs::-webkit-scrollbar { display:none; }
+.stab { padding:11px 16px; font-size:.75rem; color:var(--muted); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:.2s; background:none; border-top:none; border-left:none; border-right:none; font-family:'Noto Sans TC',sans-serif; }
+.stab.active { color:var(--gold); border-bottom-color:var(--gold); }
+.stab-icon { margin-right:4px; }
+
+/* ── MAIN LAYOUT ── */
+.main { max-width:900px; margin:0 auto; padding:16px; }
+
+/* ── PANEL ── */
+.panel { display:none; animation:fadeUp .3s ease; }
+.panel.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  display:flex; align-items:center; gap:10px;
+  margin:20px 0 10px;
+  font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:3px; color:var(--gold-dim); text-transform:uppercase;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── INFO CARD ── */
+.info-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:12px;
+  overflow:hidden;
+}
+.info-card-header {
+  padding:14px 16px 10px;
+  display:flex; align-items:flex-start; gap:10px;
+  cursor:pointer;
+}
+.info-card-icon { font-size:1.2rem; flex-shrink:0; margin-top:1px; }
+.info-card-title { font-size:.88rem; color:var(--gold-pale); font-weight:500; flex:1; line-height:1.4; }
+.info-card-meta { font-size:.68rem; color:var(--muted); margin-top:2px; }
+.info-card-tag {
+  font-size:.62rem; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 7px; border-radius:2px; flex-shrink:0; margin-top:2px;
+  font-family:'Noto Sans TC',sans-serif;
+}
+.tag-parliament { background:rgba(60,120,200,.2); color:#6090D0; border:1px solid var(--blue-border); }
+.tag-news { background:rgba(150,80,30,.2); color:#C09050; border:1px solid var(--orange-border); }
+.tag-citizen { background:rgba(80,140,80,.2); color:#70B070; border:1px solid var(--green-border); }
+.tag-intl { background:rgba(120,60,120,.2); color:#A070B0; border:1px solid rgba(140,80,160,.25); }
+.tag-urgent { background:rgba(160,50,60,.2); color:#D07080; border:1px solid var(--red-border); }
+
+.info-card-arrow { color:var(--gold-dim); font-size:.75rem; margin-top:4px; flex-shrink:0; transition:.25s; }
+.info-card.open .info-card-arrow { transform:rotate(180deg); }
+
+.info-card-body { display:none; padding:0 16px 16px; border-top:1px solid rgba(255,255,255,.04); }
+.info-card.open .info-card-body { display:block; }
+
+.info-card-detail { font-size:.83rem; color:var(--muted); line-height:1.8; padding-top:10px; margin-bottom:12px; }
+.info-card-detail strong { color:var(--text); }
+.info-card-detail em { color:var(--gold-pale); font-style:italic; }
+
+/* source line */
+.source-line { font-size:.68rem; color:var(--muted); margin-top:8px; border-top:1px solid rgba(255,255,255,.06); padding-top:6px; }
+.source-line a { color:var(--gold-dim); text-decoration:none; }
+
+/* ── PRAYER BOX ── */
+.prayer-box {
+  background:rgba(201,168,76,.05);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:4px;
+  padding:12px 14px;
+}
+.prayer-label { font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:2px; color:var(--gold); margin-bottom:7px; }
+.prayer-text { font-family:'IM Fell English',serif; font-style:italic; font-size:.85rem; color:var(--gold-pale); line-height:1.9; }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:8px; margin-bottom:16px;
+}
+.stat-box {
+  background:var(--card); border:1px solid var(--border); border-radius:6px;
+  padding:12px 14px; text-align:center;
+}
+.stat-num { font-family: 'Oswald', sans-serif; font-weight: 600; }
+.stat-num_SKIP { font-family:'Cinzel',serif; font-size:1.4rem; color:var(--gold); line-height:1; margin-bottom:4px; }
+.stat-label { font-size:.68rem; color:var(--muted); line-height:1.4; }
+.stat-delta { font-size:.65rem; margin-top:3px; }
+.delta-up { color:var(--red); }
+.delta-down { color:#4CAF50; }
+
+/* ── URGENT BANNER ── */
+.urgent-banner {
+  background:var(--red-bg);
+  border:1px solid var(--red-border);
+  border-left:3px solid var(--red);
+  border-radius:4px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.urgent-icon { font-size:1rem; flex-shrink:0; }
+.urgent-text { font-size:.82rem; color:#E08090; line-height:1.7; }
+.urgent-text strong { color:var(--red); }
+
+/* ── QUOTE BOX (citizen voice) ── */
+.quote-box {
+  background:var(--green-bg);
+  border:1px solid var(--green-border);
+  border-left:3px solid var(--green);
+  border-radius:4px;
+  padding:12px 14px;
+  margin-bottom:12px;
+}
+.quote-src { font-size:.68rem; color:#5A9A5A; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; }
+.quote-text { font-family:'IM Fell English',serif; font-style:italic; font-size:.85rem; color:#B0D0B0; line-height:1.85; }
+.quote-context { font-size:.72rem; color:var(--muted); margin-top:6px; }
+
+/* ── PARLIAMENT ITEM ── */
+.parl-item {
+  background:var(--blue-bg);
+  border:1px solid var(--blue-border);
+  border-radius:4px;
+  padding:12px 14px;
+  margin-bottom:10px;
+}
+.parl-header { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px; }
+.parl-title { font-size:.85rem; color:#8AB4E8; font-weight:500; line-height:1.4; }
+.parl-date { font-size:.65rem; color:var(--muted); flex-shrink:0; }
+.parl-who { font-size:.72rem; color:var(--muted); margin-bottom:6px; }
+.parl-body { font-size:.8rem; color:var(--muted); line-height:1.75; }
+.parl-body strong { color:var(--text); }
+
+/* ── WORLD NEWS ── */
+.world-item {
+  background:rgba(80,40,120,.1);
+  border:1px solid rgba(140,80,160,.2);
+  border-radius:4px;
+  padding:12px 14px;
+  margin-bottom:10px;
+}
+.world-flag { font-size:1rem; margin-right:6px; }
+.world-title { font-size:.85rem; color:#C0A0E0; font-weight:500; margin-bottom:4px; }
+.world-impact { font-size:.75rem; color:var(--muted); line-height:1.7; }
+.world-impact strong { color:#E0C0FF; }
+
+/* ── WEEKLY SUMMARY ── */
+.summary-box {
+  background:linear-gradient(135deg,#0F1430,#1A0F30);
+  border:1px solid rgba(201,168,76,.2);
+  border-radius:6px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.summary-title { font-family:'Cinzel',serif; font-size:.8rem; color:var(--gold); letter-spacing:2px; margin-bottom:12px; }
+.summary-points { list-style:none; }
+.summary-points li { font-size:.82rem; color:var(--text); padding:6px 0; border-bottom:1px solid rgba(255,255,255,.04); display:flex; gap:8px; }
+.summary-points li:last-child { border-bottom:none; }
+.summary-icon { flex-shrink:0; }
+
+/* ── DOWNLOAD / SHARE ── */
+.action-bar { display:flex; gap:8px; flex-wrap:wrap; margin:16px 0; }
+.action-btn {
+  background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25);
+  color:var(--gold); font-size:.75rem; padding:8px 14px; border-radius:4px;
+  cursor:pointer; font-family:'Noto Sans TC',sans-serif;
+  transition:.2s;
+}
+.action-btn:hover { background:rgba(201,168,76,.2); }
+
+/* ── FOOTER ── */
+.footer { text-align:center; padding:24px 16px; border-top:1px solid var(--border); margin-top:24px; }
+.footer-maranatha { font-family:'Cinzel',serif; color:var(--gold); letter-spacing:4px; font-size:.9rem; margin-bottom:4px; }
+.footer-sub { font-size:.7rem; color:var(--muted); line-height:1.8; }
+
+/* ── HOW TO ── */
+.howto { background:rgba(201,168,76,.05); border-bottom:1px solid var(--border); padding:8px 16px; font-size:.73rem; color:var(--muted); text-align:center; }
+.howto strong { color:var(--gold); }
+
+.ekklesia-reminder { background:linear-gradient(135deg,#0F1438,#1A0A30); border-bottom:1px solid rgba(201,168,76,.25); padding:18px 20px; position:relative; overflow:hidden; }
+.ekklesia-reminder::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.08),transparent 70%); pointer-events:none; }
+.reminder-title { font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:3px; color:#7A5E1A; text-transform:uppercase; margin-bottom:10px; position:relative; }
+.reminder-body { position:relative; display:flex; gap:14px; align-items:flex-start; }
+.reminder-icon { font-size:1.4rem; flex-shrink:0; margin-top:2px; }
+.reminder-text { flex:1; }
+.reminder-call { font-family:'Noto Serif TC',serif; font-size:.82rem; color:#F5E9CC; line-height:1.85; margin-bottom:10px; font-weight:500; }
+.reminder-call strong { color:#C9A84C; }
+.reminder-verse { font-family:'IM Fell English',serif; font-style:italic; font-size:.82rem; color:rgba(245,233,204,.75); line-height:1.85; border-left:2px solid rgba(201,168,76,.35); padding-left:12px; }
+.reminder-verse cite { display:block; font-style:normal; font-size:.7rem; color:#7A5E1A; margin-top:4px; letter-spacing:1px; }
+
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div>
+      <div class="topbar-logo">⛪ 守望情報室</div>
+      <div class="topbar-sub">新加坡 Ekklesia · Watchmen Intelligence</div>
+    </div>
+  </div>
+  <div class="topbar-date">
+    <span class="live-dot"></span>2026年6月
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>新加坡守望情報室</h1>
+  <p class="hero-sub">國會 · 新聞 · 國際 · 市民心聲 → 守望禱告</p>
+  <div class="hero-verse">
+    「我在你城牆上設立守望的人；他們晝夜必不靜默。」— 以賽亞書 62:6
+  </div>
+</div>
+
+
+<!-- EKKLESIA REMINDER -->
+<div class="ekklesia-reminder">
+  <div class="reminder-title">✦ Ekklesia 的呼召 ✦</div>
+  <div class="reminder-body">
+    <div class="reminder-icon">🔥</div>
+    <div class="reminder-text">
+      <p class="reminder-call">
+        <strong>Ekklesia 是跟隨耶穌</strong>——進入每一個層面服事人群的門徒。在政府機構、職場企業、學校研究院、醫院社服中心、媒體數字空間、藝術娛樂廣場、組屋社區與每一個有人的角落——祂在哪裡，我們就在哪裡。
+      </p>
+      <p class="reminder-verse">
+        「若有人服事我、就當跟從我．我在那裡、服事我的人、也要在那裡．若有人服事我、我父必尊重他。」
+        <cite>— 約翰福音 12:26</cite>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="howto">
+  點選分頁切換資料來源 → 展開每項查看詳情和<strong>守望禱告</strong> → 定期更新守望新加坡
+</div>
+
+<!-- SOURCE TABS -->
+<nav class="source-tabs">
+  <button class="stab active" onclick="switchTab(0)"><span class="stab-icon">📋</span>本週摘要</button>
+  <button class="stab" onclick="switchTab(1)"><span class="stab-icon">🏛️</span>國會動態</button>
+  <button class="stab" onclick="switchTab(2)"><span class="stab-icon">📰</span>國內新聞</button>
+  <button class="stab" onclick="switchTab(3)"><span class="stab-icon">🌏</span>國際影響</button>
+  <button class="stab" onclick="switchTab(4)"><span class="stab-icon">💬</span>市民心聲</button>
+  <button class="stab" onclick="switchTab(5)"><span class="stab-icon">🙏</span>守望禱告</button>
+  <button class="stab" onclick="switchTab(6)"><span class="stab-icon">👑</span>天國視角</button>
+</nav>
+
+<div class="main">
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 0：本週摘要 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel active" id="panel-0">
+
+  <!-- stats -->
+  <div class="section-label">本週關鍵數字</div>
+  <div class="stats-strip">
+    <div class="stat-box">
+      <div class="stat-num">0.87</div>
+      <div class="stat-label">生育率 TFR<br>2025年歷史新低</div>
+      <div class="stat-delta delta-up">↓ 從 0.97 跌落</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">14,400</div>
+      <div class="stat-label">2025年全年裁員人數</div>
+      <div class="stat-delta delta-up">↑ 按年升10.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">123</div>
+      <div class="stat-label">新聞自由排名<br>（180國中）</div>
+      <div class="stat-delta delta-up">↓ 得分再跌</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">56%</div>
+      <div class="stat-label">PMET認為需要<br>提升技能</div>
+      <div class="stat-delta delta-up">↑ 持續上升</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">89%</div>
+      <div class="stat-label">市民不相信薪酬<br>能追上通脹</div>
+      <div class="stat-delta">Yahoo民調</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3-4K</div>
+      <div class="stat-label">護士缺口人數<br>2026年估計</div>
+      <div class="stat-delta delta-up">↑ 嚴重短缺</div>
+    </div>
+  </div>
+
+  <!-- urgent -->
+  <div class="section-label">需要緊急守望</div>
+  <div class="urgent-banner">
+    <div class="urgent-icon">🔴</div>
+    <div class="urgent-text"><strong>裁員加速：</strong>渣打銀行確認2030年前裁減7,000個後台職位，DBS削減4,000個合約職位。金融服務業PMET裁員率升至每千人10.1人。AI自動化與結構重組同步推進，對中年工人衝擊最大。</div>
+  </div>
+  <div class="urgent-banner">
+    <div class="urgent-icon">🔴</div>
+    <div class="urgent-text"><strong>生育危機：</strong>2025年TFR跌至0.87歷史新低，全年只有27,500名嬰兒出生，結婚宗數跌至24,687宗。政府警告若趨勢持續，公民人口2040年代初開始萎縮。</div>
+  </div>
+  <div class="urgent-banner">
+    <div class="urgent-icon">🟠</div>
+    <div class="urgent-text"><strong>外籍勞工困境：</strong>緬甸工人遭受剝削的CNA報道引發關注。移工精神健康支援嚴重不足，研究顯示他們因恐懼失業而不敢求助。禁止籠式羅里運送工人的改革被批評為「小步」。</div>
+  </div>
+
+  <!-- weekly summary -->
+  <div class="section-label">本週守望摘要</div>
+  <div class="summary-box">
+    <div class="summary-title">✦ 2026年6月第一週 · 守望摘要 ✦</div>
+    <ul class="summary-points">
+      <li><span class="summary-icon">🏛️</span>國會通過《資訊通訊媒體發展局（修訂）法案》，擴大網絡內容監管權力，有關新聞自由的爭議持續</li>
+      <li><span class="summary-icon">💼</span>就業市場：招聘職位增加但結構性技能錯配嚴重，初級白領職位仍最高風險</li>
+      <li><span class="summary-icon">🏥</span>MOH發出登革熱警示；護士缺口問題在國會再被提出，政府承諾2030年前培訓15,000名醫護</li>
+      <li><span class="summary-icon">🌏</span>美國關稅局勢影響新加坡出口導向企業，貿工部上調2026年增長預測至2%-4%</li>
+      <li><span class="summary-icon">💬</span>「本地工人不夠飢渴」言論在網上引發強烈反彈，揭示僱主與工人之間深層張力</li>
+      <li><span class="summary-icon">🏠</span>HDB百萬元二手組屋成交創新高，年輕夫婦置業壓力加劇</li>
+    </ul>
+  </div>
+
+
+  <div class="section-label">天國視角 · 張力總覽</div>
+  <div style="background:linear-gradient(135deg,#0F1438,#1A0830);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:18px;margin-bottom:16px;">
+    <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:.7rem;letter-spacing:3px;margin-bottom:12px;">✦ 本週守望背後的更大圖景 ✦</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.15);border-radius:4px;padding:11px;">
+        <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--gold);letter-spacing:2px;margin-bottom:7px;">🌍 世界的出路</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.9;">GDP · AI競爭力<br>ESR 32項建議<br>地緣政治影響力<br>種族和諧（表面）<br>科技解決問題</div>
+      </div>
+      <div style="background:rgba(120,60,180,.1);border:1px solid rgba(140,80,200,.2);border-radius:4px;padding:11px;">
+        <div style="font-family:'Cinzel',serif;font-size:.65rem;color:#A070D0;letter-spacing:2px;margin-bottom:7px;">👑 天國的出路</div>
+        <div style="font-size:.75rem;color:#C0A0E0;line-height:1.9;">神的國降臨<br>神國永恆應許<br>萬王之王統管<br>萬族真實合一<br>「我是道路真理生命」</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(201,168,76,.3);padding:8px 10px;border-radius:0 3px 3px 0;">
+        <div style="font-size:.72rem;color:var(--gold-pale);font-weight:600;margin-bottom:3px;">🌏 張力一</div>
+        <div style="font-size:.72rem;color:var(--muted);">多元宗教 vs 耶穌是唯一道路<br>→ 以生命見證，非爭辯</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(201,168,76,.3);padding:8px 10px;border-radius:0 3px 3px 0;">
+        <div style="font-size:.72rem;color:var(--gold-pale);font-weight:600;margin-bottom:3px;">👑 張力二</div>
+        <div style="font-size:.72rem;color:var(--muted);">國家主權 vs 神的主權<br>→ 守望更高的王</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(201,168,76,.3);padding:8px 10px;border-radius:0 3px 3px 0;">
+        <div style="font-size:.72rem;color:var(--gold-pale);font-weight:600;margin-bottom:3px;">🕊️ 張力三</div>
+        <div style="font-size:.72rem;color:var(--muted);">地上和諧 vs 天國合一<br>→ Ekklesia預示天國</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(201,168,76,.3);padding:8px 10px;border-radius:0 3px 3px 0;">
+        <div style="font-size:.72rem;color:var(--gold-pale);font-weight:600;margin-bottom:3px;">✨ 張力四</div>
+        <div style="font-size:.72rem;color:var(--muted);">MARANATHA在多元社會<br>→ 以終點眼光守望當下</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:var(--gold-pale);text-align:center;border-top:1px solid rgba(201,168,76,.15);padding-top:10px;">
+      點選「天國視角」分頁查看完整四個張力守望禱告
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="action-btn" onclick="switchTab(5)">🙏 前往本週守望禱告</button>
+    <button class="action-btn" onclick="switchTab(1)">🏛️ 查看國會動態</button>
+    <button class="action-btn" onclick="switchTab(4)">💬 聽市民心聲</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 1：國會動態 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel" id="panel-1">
+
+  <div class="section-label">第15屆國會 · 第一會期 · 2025年9月至今</div>
+
+  <div class="parl-item">
+    <div class="parl-header">
+      <div class="parl-title">AI生成假猥褻圖片問題進入學校</div>
+      <div class="parl-date">2026年5月5日</div>
+    </div>
+    <div class="parl-who">工人黨議員 Sylvia Lim（後港）提問 · 教育部長 Desmond Lee 回應</div>
+    <div class="parl-body">Lim議員問及學生利用AI製作同學虛假猥褻圖片的個案是否上升。Desmond Lee確認個案從零開始上升，數字仍然有限，但<strong>MOE正密切追蹤</strong>。將通過網絡健康課程和將於2026年6月底運作的「網絡安全委員會」（OSC）回應。</div>
+    <div class="prayer-box" style="margin-top:10px;">
+      <div class="prayer-label">🙏 守望禱告</div>
+      <p class="prayer-text">求神保護學校中的孩子，不被AI生成的羞辱所傷。讓Ekklesia信徒老師在課室中成為孩子的守護者，教導他們以神的眼光看待自己和他人的尊嚴。</p>
+    </div>
+  </div>
+
+  <div class="parl-item">
+    <div class="parl-header">
+      <div class="parl-title">NCMP就Budget 2026提出AI保護工人三柱策略</div>
+      <div class="parl-date">2026年2月26日</div>
+    </div>
+    <div class="parl-who">非選區議員 Andre Low（工人黨）預算辯論發言</div>
+    <div class="parl-body">Low提出三項具體建議：(1) 發展主權AI能力而非只依賴租用；(2) 保護面臨「底層梯子斷裂」的年輕畢業生；(3) 推出「AI利益審計」和<strong>裁員保險</strong>。他指出SkillsFuture Level-Up計劃現限40歲以上，但衝擊已在35歲出現，促請降低年齡門檻。</div>
+    <div class="prayer-box" style="margin-top:10px;">
+      <div class="prayer-label">🙏 守望禱告</div>
+      <p class="prayer-text">求神讓國會的辯論，不只是政黨之間的角力，而是真正為工人發聲的平台。讓「裁員保險」的提議被認真評估，讓那些在裁員中墜落的人有安全網。</p>
+    </div>
+  </div>
+
+  <div class="parl-item">
+    <div class="parl-header">
+      <div class="parl-title">食品供應鏈安全問題：多位議員提問</div>
+      <div class="parl-date">2026年4月7日</div>
+    </div>
+    <div class="parl-who">議員 Choo Pei Ling、Lee Hui Ying 等提問 · 可持續發展及環境部</div>
+    <div class="parl-body">面對全球地緣政治干擾食品供應鏈，議員追問：若多個進口來源同時中斷，應急計劃是否充分？政府承諾有<strong>多元化食品儲備和緊急應對機制</strong>，但未公開具體細節。</div>
+    <div class="prayer-box" style="margin-top:10px;">
+      <div class="prayer-label">🙏 守望禱告</div>
+      <p class="prayer-text">求神讓新加坡的食品安全政策，真正保護低收入家庭在危機中不首先承受衝擊。讓Ekklesia為這個沒有農業的城市的韌性守望。</p>
+    </div>
+  </div>
+
+  <div class="parl-item">
+    <div class="parl-header">
+      <div class="parl-title">公共服務準備迎接結構性變革：陳振聲部長演講</div>
+      <div class="parl-date">2026年財政撥款委員會辯論</div>
+    </div>
+    <div class="parl-who">國務資政兼人力部長 陳振聲 · 總理公署</div>
+    <div class="parl-body">陳振聲強調公共服務員必須做到三件事：「理解科技、理解世界、理解新加坡人」。承認國際秩序和國內環境正在<strong>根本性改變</strong>，公共服務必須重新思考方式、抓住新機遇。</div>
+    <div class="prayer-box" style="margin-top:10px;">
+      <div class="prayer-label">🙏 守望禱告</div>
+      <p class="prayer-text">求神讓在政府部門的Ekklesia信徒，不只是理解科技和世界，也理解神對這座城市的心意。讓他們在公共服務中帶入神國的智慧和憐憫。</p>
+    </div>
+  </div>
+
+  <div class="parl-item">
+    <div class="parl-header">
+      <div class="parl-title">在野黨領袖事件：Pritam Singh被撤職</div>
+      <div class="parl-date">2026年1月14-15日</div>
+    </div>
+    <div class="parl-who">第15屆國會重大政治事件</div>
+    <div class="parl-body">國會通過動議宣告Pritam Singh不適合擔任反對黨領袖，工人黨12名議員全體反對。Singh翌日被總理撤銷職務。事件引發社會廣泛討論政府和反對黨關係，以及<strong>民主監督機制</strong>的問題。</div>
+    <div class="prayer-box" style="margin-top:10px;">
+      <div class="prayer-label">🙏 守望禱告</div>
+      <p class="prayer-text">求神讓新加坡的政治生態，建立在公義和問責的基礎上。讓Ekklesia信徒在這些政治爭議中，不被黨派立場左右，而是以神的眼光辨別公義。讓國會成為真正服事人民的地方。</p>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 2：國內新聞 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel" id="panel-2">
+
+  <div class="section-label">職場與就業</div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">💼</div>
+      <div style="flex:1">
+        <div class="info-card-title">「本地工人不夠飢渴」言論引爆網絡反彈</div>
+        <div class="info-card-meta">2026年5月 · CNA Deep Dive播客</div>
+      </div>
+      <div class="info-card-tag tag-news">國內新聞</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">法律招聘公司代表Lee Shulin在CNA播客中形容外籍工人比本地工人更「飢渴」。言論在LinkedIn、TikTok、Reddit迅速瘋傳，引發強烈批評。網民指出評論忽視了<strong>本地工人面對的現實：高房價、家庭責任、照顧父母</strong>的壓力，並非缺乏動力。有留言指「飢渴 = 接受剝削」。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，這場爭議揭示了本地工人心中積累已久的委屈和被誤解的憤怒。求你讓僱主和工人之間重建真實的理解，讓新加坡的職場文化不以「飢渴程度」——即對剝削的忍耐——作為衡量工人的標準。</p>
+      </div>
+      <div class="source-line">來源：The Online Citizen, CNA，2026年5月</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">🏦</div>
+      <div style="flex:1">
+        <div class="info-card-title">渣打確認2030年前裁7,000後台職；DBS削4,000合約職</div>
+        <div class="info-card-meta">2025-2026年 · 金融服務業結構重組</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">渣打成為首間公開將AI裁員計劃時間表化的大型銀行，將以AI自動化處理行政、合規、後台工作。DBS同時計劃在3年內削減4,000個合約及臨時職位。這些後台職位大多由<strong>40-55歲的中年PMET</strong>擔任，轉型支援有限。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">父神，那些在渣打和DBS的後台部門工作、正等待消息的人，你看見他們。求你為每一個將被裁員的人，在那之前已開始預備出路。讓Ekklesia信徒在這些銀行中成為同事的牧者，在不確定中帶入平安和實際的幫助。</p>
+      </div>
+      <div class="source-line">來源：MOM裁員報告，各媒體報道，2025-2026年</div>
+    </div>
+  </div>
+
+  <div class="section-label">家庭與社會</div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👶</div>
+      <div style="flex:1">
+        <div class="info-card-title">生育率跌至0.87歷史新低：「每100人只剩44個孩子」</div>
+        <div class="info-card-meta">2026年2月26日 · 副總理顏金勇國會發言</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">副總理在預算辯論中披露：TFR從2024年的0.97再跌至2025年的0.87。全年只有<strong>27,500名嬰兒</strong>出生，創歷史新低。顏金勇以「每100人今天生44個孩子、19個孫」形容危機之嚴峻。年輕夫婦引述住房成本、職場壓力、育兒費用是主因。政府提升Baby Bonus至最多S$54,000。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，「孩子是你所賜的產業」——但新加坡的年輕夫婦正在告訴我們，他們感到無力承接這份產業。求你在財務壓力和社會焦慮之上，讓Ekklesia信徒夫婦感受到你對生命的呼召和你的供應。讓Ekklesia（一群跟隨耶穌的門徒）成為真實的育兒群體。</p>
+      </div>
+      <div class="source-line">來源：總理公署人口局，MOM統計，2026年2月</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">🏠</div>
+      <div style="flex:1">
+        <div class="info-card-title">百萬元HDB二手交易創紀錄：住房可負擔性持續受壓</div>
+        <div class="info-card-meta">2026年 · HDB市場報告</div>
+      </div>
+      <div class="info-card-tag tag-news">國內新聞</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">2026年HDB二手交易中百萬元以上組屋成交創新高，超過4,000宗交易超越百萬元。即使政府加快BTO供應（2025-2027年推出55,000單位），但建成需時，年輕家庭仍面對<strong>等待期長、現有市場價格高企</strong>的困境。副總理公民人口增長率2025年只有0.7%。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">求神讓HDB新供應真正惠及年輕夫婦，讓他們不必在等待組屋和生育計劃之間做出痛苦選擇。讓政府的住房政策，以普通家庭的需要為核心，而非市場回報。</p>
+      </div>
+      <div class="source-line">來源：HDB報告，媒體報道，2026年</div>
+    </div>
+  </div>
+
+
+  <div class="section-label">年長者守望</div>
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👴</div>
+      <div style="flex:1">
+        <div class="info-card-title">新加坡2026年正式進入「超老齡社會」· 獨居長者戶數十年翻倍</div>
+        <div class="info-card-meta">2026年 · MOH · 新加坡統計局 · Age Well SG</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail"><strong>2026年新加坡正式進入「超老齡社會」</strong>（65歲以上佔20%以上）。全國789,580名65歲以上長者中，<strong>獨居長者戶數從2014年的42,100戶增至2024年的87,200戶</strong>——十年翻倍，2030年預計達122,000戶。衛生部長吳義遠明確指出：「孤獨是許多長者最大的敵人。」研究顯示長期孤獨對健康傷害等同每天吸煙一包。60歲以上長者中有10%患失智症（約51,934人），30%的失智症照顧者因照顧而放棄工作。2026年7月1日退休年齡提升至64歲，再就業年齡至69歲。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，你說白髮是榮耀的冠冕。求你讓新加坡的87,200名獨居長者，每一個人都感受到被看顧。讓Ekklesia信徒成為社區中長者真實的鄰舍——敲門探訪、陪同覆診、一起吃飯。讓那些在失智症黑暗中的長者，仍感受到你從不改變的愛。讓照顧父母而放棄工作的照顧者，在Ekklesia群體中找到支援和喘息的空間。</p>
+      </div>
+      <div class="source-line">來源：MOH Age Well SG、新加坡統計局（2025年）、國會質詢MOH（2026年1月）</div>
+    </div>
+  </div>
+
+  <div class="section-label">兒童與幼兒</div>
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👶</div>
+      <div style="flex:1">
+        <div class="info-card-title">兒童螢幕時間危機：嬰兒期屏幕暴露與青少年焦慮症直接相關</div>
+        <div class="info-card-meta">2025年12月30日 · A*STAR × NUS · GUSTO出生隊列研究</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">新加坡最大出生隊列研究（GUSTO）追蹤500名兒童超過十年，發現<strong>2歲前過多螢幕時間與青少年腦部發育改變、決策緩慢和焦慮症直接相關</strong>。研究者建議2歲前完全避免螢幕。72%青少年曾使用AI伴侶，約三分之一用於情感支援——這是極需守望的新現象。幼兒教育工作者（23,000人）薪酬偏低，ESR明確建議提升，但落實需時。KidSTART計劃為低收入家庭0-6歲兒童提供整合支援。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主耶穌，你說「讓小孩子到我這裡來」。求你保護新加坡的嬰幼兒，讓父母有智慧和勇氣在數字世界中為孩子設立界限。讓Ekklesia信徒家庭以親子閱讀、真實陪伴和信仰傳承取代螢幕。讓那些正以AI為「情感伴侶」的孤獨青少年，在真實的人際關係和信仰群體中找到真正的歸屬。</p>
+      </div>
+      <div class="source-line">來源：A*STAR IHDP / NUS，eBioMedicine，2025年12月；ECDA；MOH指引，2025年1月</div>
+    </div>
+  </div>
+
+  <div class="section-label">外籍勞工</div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👷</div>
+      <div style="flex:1">
+        <div class="info-card-title">緬甸工人遭受剝削的CNA調查報道</div>
+        <div class="info-card-meta">2026年3月12日 · CNA / Straits Times</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">CNA和Straits Times報道緬甸工人在新加坡被剝削的情況：「我害怕回家」。移工因恐懼失去工作而不敢舉報剝削，精神健康支援嚴重不足。禁止籠式羅里運送工人的改革被NGO批評為「小步」。<strong>約110萬名工作准證持有人</strong>月薪低於S$3,000，保護網嚴重不足。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，那些「害怕回家」的緬甸工人，你認識他們每一個人。求你讓那些在剝削中無法開口的人，找到可以安全求助的地方。讓Ekklesia的Ekklesia信徒，成為移工在這座城市可以信任的人。感動政府真正加強對外籍勞工的保護。</p>
+      </div>
+      <div class="source-line">來源：CNA, Straits Times，2026年3月</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 3：國際影響 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel" id="panel-3">
+
+  <div class="section-label">影響新加坡的國際局勢</div>
+
+  <div class="world-item">
+    <div class="world-title"><span class="world-flag">🇺🇸</span>美國關稅政策與貿易不確定性</div>
+    <div class="world-impact">美國對多個貿易夥伴加徵關稅，全球供應鏈重組加速。新加坡作為貿易樞紐直接受到衝擊。貿工部已將2026年增長預測上調至2%-4%，但警告<strong>下行風險仍在</strong>。外交部長維文警告：「更危險的世界對小國不利」。<br><br>
+    <strong style="color:#C0A0E0">守望焦點：</strong>求神讓新加坡在大國博弈中，保持真正的中立和主見。讓領袖有勇氣在必要時說「不」，不因經濟利益而出賣原則。</div>
+  </div>
+
+  <div class="world-item">
+    <div class="world-title"><span class="world-flag">🌏</span>地緣政治撕裂與新加坡「選邊」壓力</div>
+    <div class="world-impact">外交部長維文（Vivian Balakrishnan）在國會明言：「新加坡必須保持說『不』的能力，即使付出代價。」新的全球均衡局面2026年難以形成。中美競爭持續，東盟內部分歧加深。<strong>小國在夾縫中求存的現實</strong>日益嚴峻。<br><br>
+    <strong style="color:#C0A0E0">守望焦點：</strong>求神讓新加坡在地緣政治的急流中，有掌舵的智慧。讓領袖的決策不出於恐懼，而出於原則。</div>
+  </div>
+
+  <div class="world-item">
+    <div class="world-title"><span class="world-flag">🤖</span>全球AI競賽：新加坡的定位</div>
+    <div class="world-impact">美國、中國、歐盟的AI監管框架分歧加深，全球AI治理碎片化。新加坡試圖在「AI信任型服務」中建立差異化地位，在2026年5月更新國家AI戰略。<strong>量子科技公司Quantinuum</strong>宣布在新加坡設立研發中心。<br><br>
+    <strong style="color:#C0A0E0">守望焦點：</strong>求神讓新加坡在AI治理上成為真正有道德良心的聲音，不只追求領先，也追求造福人類。</div>
+  </div>
+
+  <div class="world-item">
+    <div class="world-title"><span class="world-flag">🌡️</span>氣候變化：新加坡的脆弱性</div>
+    <div class="world-impact">海平面上升、高溫極端天氣對新加坡構成長遠威脅。S$8億「去碳化大挑戰」計劃推進中，但去碳化成本對低收入家庭的衝擊仍缺乏具體保障。<strong>可持續航空燃料和氫能源</strong>基礎設施投資加快。<br><br>
+    <strong style="color:#C0A0E0">守望焦點：</strong>求神讓Ekklesia信徒以「地球管家」的身分，在個人生活和企業決策中回應氣候使命，讓環保不成為只有富人才能負擔的選擇。</div>
+  </div>
+
+  <div class="world-item">
+    <div class="world-title"><span class="world-flag">🇲🇲</span>緬甸危機與新加坡的移工影響</div>
+    <div class="world-impact">緬甸軍政府持續的暴力衝突，使大量緬甸工人面臨兩難：留在新加坡打工、與家人分離；或返回充滿危險的家鄉。「我害怕回家」的CNA報道揭示這一群體<strong>極度脆弱的處境</strong>。新加坡有大量來自緬甸的工人，主要在建築和服務業。<br><br>
+    <strong style="color:#C0A0E0">守望焦點：</strong>求神讓在新加坡的緬甸工人，在最艱難的處境中感受到被看見和被愛。讓Ekklesia中有人被呼召服事這個群體。</div>
+  </div>
+
+  <div class="world-item">
+    <div class="world-title"><span class="world-flag">📡</span>新聞自由：RSF 2026指數</div>
+    <div class="world-impact">2026年RSF全球新聞自由指數：新加坡排名第123位，立法指標跌至第164位。RSF指出政商精英利用POFMA、誹謗訴訟（SLAPP）限制媒體。2025年12月兩名部長就彭博社房產報道提出訴訟，仍未解決。<strong>獨立媒體空間進一步收窄。</strong><br><br>
+    <strong style="color:#C0A0E0">守望焦點：</strong>求神讓Ekklesia信徒媒體人在自我審查的壓力下，仍持守報道的誠信。讓真實的聲音不被完全扼殺。</div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 4：市民心聲 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel" id="panel-4">
+
+  <div class="section-label">Reddit r/singapore · HardwareZone · 社交媒體 · 街頭聲音</div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 Reddit r/singapore · 5月 · 職場討論</div>
+    <div class="quote-text">「飢渴 = 願意接受低薪、超時工作、不追討拖欠薪金。你以為這是優點，我們叫它剝削。」</div>
+    <div class="quote-context">回應招聘人員稱外籍工人比本地人更飢渴的評論 · 引發逾千條回應</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 HardwareZone · 就業討論區 · 近期</div>
+    <div class="quote-text">「我做了20年銀行後台，現在50歲，公司說要『轉型』。SkillsFuture的課程我看了，不是針對我們這種年紀做的。面試了三家，一聽到年齡就沒消息了。真的很絕望。」</div>
+    <div class="quote-context">中年PMET在就業論壇的留言，代表大量相似個案</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 Yahoo Singapore 民調 · 1月2026年 · 655人</div>
+    <div class="quote-text">89%受訪者表示不相信薪酬增長能追上通脹，只有9%感到樂觀。「物價可能穩定了，但我們的信心沒有回來。」</div>
+    <div class="quote-context">在核心通脹降至0.7%後，民心仍感受不到經濟好轉</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 社交媒體 · 年輕夫婦聲音 · 2026年</div>
+    <div class="quote-text">「我們結婚三年了，組屋還在等。老人家催生孩子，但家裏連穩定的地方都沒有。孩子要等組屋，組屋要等建好，建好又要存首期。這個cycle什麼時候完？」</div>
+    <div class="quote-context">年輕已婚夫婦對住房和生育壓力的真實心聲</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 Straits Times 讀者來信 / 論壇 · 移工議題</div>
+    <div class="quote-text">「每天在建築工地看到他們，但我從來不知道他們的名字。這座城市是他們用雙手蓋起來的，我們欠他們一聲謝謝，更欠他們尊重。」</div>
+    <div class="quote-context">本地居民對外籍勞工處境的反思，在系列報道後出現</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 CNA Deep Dive 播客留言 · 2026年4月</div>
+    <div class="quote-text">「護士的空缺說了幾十年了。問題不是人才不夠，是待遇不夠。先把薪酬和工時正常化，再談吸引人才。用愛發電有個限度。」</div>
+    <div class="quote-context">醫護人員對行業薪酬和工作量問題的心聲</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 本地教育工作者論壇 · 2025年底</div>
+    <div class="quote-text">「AI工具本來說是幫我們減工作量。現在是多了AI工具，但行政工作沒有少，反而要學怎麼用AI、寫報告說明怎麼用了AI。倍增，不是減少。」</div>
+    <div class="quote-context">呼應OECD TALIS 2024調查發現：新加坡教師工作壓力高於OECD平均</div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-src">📱 HardwareZone · 移民整合討論 · 2026年3月</div>
+    <div class="quote-text">「我支持引進新公民，但整合不能只靠e-learning module。要讓他們真的認識我們，要有真實的接觸機會，不是坐在電腦前看一個影片。」</div>
+    <div class="quote-context">回應政府推出的新PR整合計劃，市民認為力度不足</div>
+  </div>
+
+  <div class="section-label">守望回應</div>
+  <div class="prayer-box" style="margin-bottom:16px;">
+    <div class="prayer-label">🙏 為市民心聲守望</div>
+    <p class="prayer-text">主啊，這些聲音——憤怒的、疲倦的、絕望的、等待的——你都聽見了。每一條留言背後都是一個真實的人，正在面對真實的掙扎。求你讓Ekklesia不只在聚會裏聽講道，也在這些論壇和對話中，聽見城市的呼聲，並以你的愛回應。讓我們成為那些聲音的守望者，把他們帶到你的面前。</p>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 5：守望禱告 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel" id="panel-5">
+
+  <div class="section-label">本週守望禱告 · 2026年6月第一週</div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">🏛️</div>
+      <div style="flex:1">
+        <div class="info-card-title">為國會和政府決策守望</div>
+        <div class="info-card-meta">本週國會：《資訊通訊媒體局修訂法》通過 · 多項民生質詢</div>
+      </div>
+      <div class="info-card-tag tag-parliament">國會</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail"><strong>背景：</strong>本週國會通過擴大網絡內容監管的法案。在ESR 32項建議落實的過程中，國會辯論的質素決定政策是否真正惠及弱勢。NCMP Andre Low提出的裁員保險和AI工人保護建議，仍待政府正式回應。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，求你讓本週國會的辯論，不只是政黨之間的角力，而是真正代表了那89%對薪酬增長感到悲觀的普通市民的聲音。讓裁員保險的提議被認真評估。讓Ekklesia信徒公務員在政策制定中，把神對弱勢的心帶入決策過程。「君王的心在耶和華手中，好像隴溝的水隨意流轉。」讓你的旨意流進新加坡的政策。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">💼</div>
+      <div style="flex:1">
+        <div class="info-card-title">為那位50歲的銀行職員守望</div>
+        <div class="info-card-meta">代表14,400名被裁員者 · 渣打DBS轉型中的工人</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail"><strong>背景：</strong>HardwareZone上那位「做了20年銀行後台、面試三家都沒消息」的50歲工人，代表了數以千計正在經歷同樣困境的人。渣打7,000、DBS 4,000的裁員計劃，不只是數字，而是數千個家庭的生計。PMET裁員率升至每千人10.1。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">父神，那位在HardwareZone寫下「真的很絕望」的50歲工人，你知道他的名字。求你在他找到下一份工作之前，賜給他平安、尊嚴和家人的支持。讓身邊的Ekklesia信徒不假裝沒看見，而是主動伸手——介紹一個聯絡人、分享一個職位、陪他吃一頓飯。讓Ekklesia（一群跟隨耶穌的門徒）的網絡成為真實的職業橋樑。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👶</div>
+      <div style="flex:1">
+        <div class="info-card-title">為等待組屋的年輕夫婦守望</div>
+        <div class="info-card-meta">TFR 0.87 · 24,687宗結婚 · HDB百萬元交易創新高</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail"><strong>背景：</strong>那對「結婚三年、組屋還在等、老人家催生孩子」的夫婦，代表了新加坡生育率危機的真實面貌。不是不想要孩子，是整個系統讓他們感到無力。TFR 0.87意味著這一代人生的孩子比上一代少了一半。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，「孩子是耶和華所賜的產業」——但這對夫婦感到無力承接。求你先安慰他們的心，讓他們在等待中不失去盼望。求你讓HDB的新供應真正趕及他們的需要。讓Ekklesia（一群跟隨耶穌的門徒）成為支持年輕家庭的群體——分擔育兒壓力、提供實際幫助，讓他們知道：有孩子，你們不是一個人。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👷</div>
+      <div style="flex:1">
+        <div class="info-card-title">為那位「害怕回家」的緬甸工人守望</div>
+        <div class="info-card-meta">CNA調查報道 · 移工精神健康 · 剝削問題</div>
+      </div>
+      <div class="info-card-tag tag-urgent">緊急守望</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail"><strong>背景：</strong>緬甸軍事衝突使工人有家難回，又在新加坡面對剝削風險。CNA報道揭示他們不敢求助，因為害怕失去工作。約110萬名工作准證持有人月薪低於S$3,000，保護網嚴重不足。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，那位在緬甸說「我害怕回家」的工人，你就在他身邊。求你讓他在新加坡的某個角落，遇見一個願意停下來聆聽他的人——也許是Ekklesia的Ekklesia信徒，也許是HOME或TWC2的社工。求你讓我們的城市，以對待尊貴之人的方式對待每一個在這裏勞動的人。感動政府加強外籍勞工保護的力度。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">📺</div>
+      <div style="flex:1">
+        <div class="info-card-title">為媒體人和新聞自由守望</div>
+        <div class="info-card-meta">RSF排名第123 · POFMA · 部長訴訟仍懸</div>
+      </div>
+      <div class="info-card-tag tag-news">媒體</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail"><strong>背景：</strong>新加坡2026年RSF新聞自由得分再跌，立法環境指標跌至第164位。兩名部長對彭博社的訴訟仍未解決，自我流亡記者Terry Xu面對新一輪訴訟。POFMA繼續被用於要求媒體發布「更正通知」。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">神啊，你是真理的神。求你保護那些在壓力下仍堅持報道真實的記者。讓Ekklesia信徒媒體人在自我審查的誘惑中，記得他們最終是向那位真理之神負責。求你讓新加坡的公共空間，有足夠的真實聲音讓政府聽見人民的真實處境。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">本週守望宣告</div>
+  <div style="background:linear-gradient(135deg,#0F1438,#1A0A30);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:20px;text-align:center;margin-bottom:16px;">
+    <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:.75rem;letter-spacing:2px;margin-bottom:12px;">✦ 守望者的宣告 ✦</div>
+    <p style="font-family:'IM Fell English',serif;font-style:italic;font-size:.9rem;color:var(--gold-pale);line-height:2;">
+      我們聽見了那50歲工人的絕望、<br>
+      那對年輕夫婦的等待、<br>
+      那緬甸工人的恐懼、<br>
+      那護士「用愛發電有個限度」的疲憊。<br><br>
+      我們把這一切帶到你的面前。<br>
+      我們是你在這城市城牆上的守望者。<br>
+      <strong style="color:var(--gold);">MARANATHA — 主耶穌啊，我願你來！</strong>
+    </p>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PANEL 6：天國視角 -->
+<!-- ══════════════════════════════════ -->
+<div class="panel" id="panel-6">
+
+  <div style="background:linear-gradient(135deg,#0F1438,#1A0830);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:20px;margin-bottom:16px;">
+    <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:.72rem;letter-spacing:3px;margin-bottom:14px;">✦ 聖經的宇宙圖景 ✦</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div style="background:rgba(255,255,255,.04);padding:12px;border-radius:4px;border-left:2px solid var(--gold);">
+        <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--gold);margin-bottom:6px;">創世紀 1:1,3</div>
+        <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:var(--gold-pale);line-height:1.8;">「起初，神創造天地……神說，要有光，就有了光。」</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);padding:12px;border-radius:4px;border-left:2px solid #A070D0;">
+        <div style="font-family:'Cinzel',serif;font-size:.65rem;color:#A070D0;margin-bottom:6px;">啟示錄 19:16</div>
+        <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:#E0C0FF;line-height:1.8;">「他身上有名寫著說：萬王之王，萬主之主。」</div>
+      </div>
+    </div>
+    <div style="font-size:.82rem;color:var(--muted);line-height:1.8;">新加坡以<strong style="color:var(--text);">種族和諧、宗教包容</strong>為國家根基。但聖經從創世紀到啟示錄，呈現的是一個截然不同的宇宙圖景——萬物藉著祂造，萬王之王必要再來。身為跟隨耶穌的Ekklesia，面對這個張力，該如何守望？</div>
+  </div>
+
+  <div class="section-label">四個張力 · 四個守望禱告</div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">🌏</div>
+      <div style="flex:1">
+        <div class="info-card-title">張力一：多元宗教 vs 耶穌是唯一道路</div>
+        <div class="info-card-meta">「你們的光也當這樣照在人前」— 馬太福音 5:16</div>
+      </div>
+      <div class="info-card-tag tag-citizen">天國視角</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">新加坡宗教和諧法律要求Ekklesia信徒尊重各信仰——這是合理的公民責任。但<strong>持守「耶穌是道路、真理、生命」，與尊重他人的選擇，並不矛盾。</strong><br><br>佛教講慈悲、伊斯蘭講憐憫、印度教講愛——但基督的愛有三個不同之處：<br><br>
+      <strong style="color:var(--gold-pale);">① 先愛</strong>——「不是我們愛神，乃是神愛我們」（約翰一書4:10）。你還是罪人的時候，祂已先愛你。<br>
+      <strong style="color:var(--gold-pale);">② 犧牲自己</strong>——不只教導愛，祂親自成為那份愛的代價，上了十字架。<br>
+      <strong style="color:var(--gold-pale);">③ 有能力改變人</strong>——「我們愛，因為神先愛我們。」不是靠自己努力，而是因被愛而有能力去愛。<br><br>
+      Ekklesia最有力的見證不是辯論，而是讓人問起：<strong>「你的愛，從哪裡來？」</strong></div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，在這個多元宗教的城市，求你讓我們不以爭辯和對抗，而是以愛、誠信和對弱勢的憐憫，成為你無聲的見證。讓人因看見我們的好行為，便將榮耀歸給天上的父。讓那些問起「你的愛從哪裡來」的人，有機會認識那位先愛了我們的神。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">👑</div>
+      <div style="flex:1">
+        <div class="info-card-title">張力二：國家主權 vs 神的主權</div>
+        <div class="info-card-meta">「君王的心在耶和華手中，好像隴溝的水隨意流轉。」— 箴言 21:1</div>
+      </div>
+      <div class="info-card-tag tag-parliament">天國視角</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">新加坡政府以務實治理著稱——ESR 32項建議、Age Well SG、SkillsFuture，都是值得守望的良善政策。但<strong>沒有任何政府是最終的主權者。</strong>當Ekklesia守望國會動態、守望ESR落實，我們不是以政府為最終的盼望，而是在承認政府的善的同時，更深地守望那位掌管萬國的神。黃循財總理說「增長將更加困難」——這正是讓人轉向那位真正的供應者的時刻。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，你是真正的主權者。求你讓新加坡的領袖在制定政策時有你的智慧引導。讓Ekklesia信徒在服從政府的同時，更深地效忠那位比任何政府更高的王——耶穌基督。讓每一項ESR建議的落實，成為祢公義流入這城市的管道。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">🕊️</div>
+      <div style="flex:1">
+        <div class="info-card-title">張力三：地上和諧 vs 天國合一</div>
+        <div class="info-card-meta">「各族、各方、各民、各國」在羔羊面前的真實合一 — 啟示錄 5:9</div>
+      </div>
+      <div class="info-card-tag tag-citizen">天國視角</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">新加坡的種族和諧是地上智慧的成就——值得感謝和守護。但<strong>天國的合一更深：不是表面的共存，而是萬族萬民在羔羊面前的真實合一。</strong>（啟示錄5:9）Ekklesia可以在這個多元的新加坡中，預先示範天國的合一——華語、英語、淡米爾語、馬來語的Ekklesia彼此守望，這本身就是向這城市最有力的見證：在神裡面，萬族真的可以和睦。</div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望禱告</div>
+        <p class="prayer-text">主啊，新加坡的多元種族是你創造的榮美。求你讓Ekklesia超越種族和語言的界限，在信仰群體中活出天國的合一。讓我們的合一成為向這城市最有力的見證：在神裡面，萬族真的可以和睦、深深相愛。讓這合一預示那日萬族在羔羊面前同聲頌讚的榮耀。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-header" onclick="toggleCard(this.parentElement)">
+      <div class="info-card-icon">✨</div>
+      <div style="flex:1">
+        <div class="info-card-title">張力四：MARANATHA — 以天國終點守望當下</div>
+        <div class="info-card-meta">「他身上有名寫著說：萬王之王，萬主之主。」— 啟示錄 19:16</div>
+      </div>
+      <div class="info-card-tag tag-urgent">天國視角</div>
+      <div class="info-card-arrow">▼</div>
+    </div>
+    <div class="info-card-body">
+      <div class="info-card-detail">MARANATHA不是逃避世界，而是以天國終點的眼光，<strong>更認真地服事當下的世界。</strong>正因為我們知道歷史有一個終點——萬王之王榮耀再來——我們才更有動力在當下守望：守望那14,400名被裁員的工人、守望那87,200名獨居長者、守望那些在深夜刷手機的孤獨青少年、守望那些「害怕回家」的緬甸勞工。<br><br>因為<strong>每一個我們守望的生命，都是祂所愛的、祂為之而死的生命。</strong></div>
+      <div class="prayer-box">
+        <div class="prayer-label">🙏 守望之禱</div>
+        <p class="prayer-text">MARANATHA — 主耶穌啊，我願你來！</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="background:linear-gradient(135deg,#0F1438,#1A0830);border:1px solid rgba(201,168,76,.25);border-radius:6px;padding:20px;margin-top:8px;text-align:center;">
+    <div style="font-family:'Cinzel',serif;color:var(--gold);font-size:.7rem;letter-spacing:3px;margin-bottom:16px;">✦ 守望之禱 ✦</div>
+    <p style="font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:var(--gold-pale);line-height:2;">
+      主啊，你是創造宇宙萬有的神，<br>
+      萬物藉著你造，沒有一樣不是藉著你造的。<br>
+      新加坡每一個種族、每一個宗教信仰的人，<br>
+      都是你所創造、你所愛的。<br><br>
+      求你讓Ekklesia以愛和謙卑持守信仰，<br>
+      以行動而非爭辯見證你。<br>
+      讓我們守望的禱告，<br>
+      成為這城市屬靈土地上預備祂降臨的工作。<br>
+      直到萬族萬民在羔羊面前同聲頌讚。
+    </p>
+    <div style="margin-top:20px;font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);letter-spacing:4px;">
+      MARANATHA
+    </div>
+    <div style="font-family:'IM Fell English',serif;font-style:italic;font-size:.9rem;color:var(--gold-pale);margin-top:6px;">
+      主耶穌啊，我願你來！
+    </div>
+  </div>
+
+</div><!-- /panel-6 -->
+
+</div><!-- /main -->
+
+
+<div style="background:rgba(201,168,76,.05);border-top:1px solid rgba(201,168,76,.15);border-bottom:1px solid rgba(201,168,76,.15);padding:12px 16px;text-align:center;">
+  <span style="font-family:'IM Fell English',serif;font-style:italic;font-size:.82rem;color:var(--gold-pale);">「他身上有名寫著說：萬王之王，萬主之主。」— 啟示錄 19:16</span>
+</div>
+
+<div class="footer">
+  <div class="footer-maranatha">MARANATHA</div>
+  <div class="footer-sub">
+    新加坡 Ekklesia 守望情報室 · 2026年6月<br>
+    資料來源：Hansard of the Parliament of Singapore · CNA · Straits Times · The Online Citizen · Reddit · HardwareZone · MOH · MOM · RSF · NTUC<br>
+    適用於Ekklesia守望禱告聚會 · 每週更新
+  </div>
+</div>
+
+<script>
+function switchTab(i) {
+  document.querySelectorAll('.stab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));
+  const tabs = document.querySelectorAll('.stab');
+  tabs[i].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:document.querySelector('.source-tabs').offsetTop-50,behavior:'smooth'});
+}
+function toggleCard(card) {
+  const open = card.classList.contains('open');
+  card.closest('.main').querySelectorAll('.info-card').forEach(c=>c.classList.remove('open'));
+  if (!open) card.classList.add('open');
+}
+</script>
+</body>
+</html>
